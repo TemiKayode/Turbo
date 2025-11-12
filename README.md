@@ -1,10 +1,4 @@
-<<<<<<< HEAD
-
-=======
 # Turbo
-<<<<<<< HEAD
-Portfolio-ready real-time chat platform showcasing backend concurrency in Go, a high-performance Rust microservice for file uploads, a Next.js frontend, Docker/K8s deployment, and CI/CD via GitLab
-=======
 
 Turbo is a full-stack, real-time messaging platform designed as a portfolio-quality showcase of modern distributed application patterns. It combines a Go realtime API, a Rust-powered file pipeline, and a Next.js client with refined branding to deliver a production-style developer experience from local dev to Kubernetes.
 
