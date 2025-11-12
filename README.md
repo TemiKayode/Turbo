@@ -100,6 +100,13 @@ Patch image references and secrets to match your environment before applying.
 - Set `SUPABASE_SERVICE_ROLE_KEY` via secure secret stores (GitLab/Actions/Kubernetes) when enabling signed uploads.
 - If you deploy on Netlify, add `SECRETS_SCAN_OMIT_KEYS=NEXT_PUBLIC_API_URL,NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_ANON_KEY,NEXT_PUBLIC_WS_URL` (or disable scanning with `SECRETS_SCAN_ENABLED=false`) so their secret scanner doesn’t block builds for the public runtime variables.
 
+**Netlify secret scanning**
+
+- Provide runtime values for the `NEXT_PUBLIC_*` variables via the Netlify UI.
+- Because those values appear in the generated `.next` bundle, add  
+  `SECRETS_SCAN_OMIT_KEYS=NEXT_PUBLIC_API_URL,NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_ANON_KEY,NEXT_PUBLIC_WS_URL`  
+  (or set `SECRETS_SCAN_ENABLED=false`) in Netlify’s environment to prevent deploys from being blocked.
+
 ---
 
 ## 🤝 Contributing & Next Steps
