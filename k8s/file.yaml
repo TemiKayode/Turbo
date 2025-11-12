@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: file-upload
+  namespace: turbo
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: file-upload }
+  template:
+    metadata:
+      labels: { app: file-upload }
+    spec:
+      containers:
+        - name: file-upload
+          image: YOUR_REGISTRY/turbo-file-upload:latest
+          env:
+            - name: AWS_REGION
+              value: us-east-1
+            - name: S3_BUCKET
+              value: your-bucket
+          ports:
+            - containerPort: 8090
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: file-upload
+  namespace: turbo
+spec:
+  selector: { app: file-upload }
+  ports:
+    - port: 80
+      targetPort: 8090
+
+

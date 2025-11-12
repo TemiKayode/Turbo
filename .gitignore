@@ -1,0 +1,33 @@
+# Node
+node_modules/
+.next/
+.turbo/
+dist/
+
+# Go
+backend/go/bin/
+backend/go/build/
+*.exe
+*.test
+*.out
+
+# Rust
+target/
+Cargo.lock
+
+# Env
+.env
+.env.local
+.env.local.sample
+
+# Editor
+.DS_Store
+.idea/
+.vscode/
+.mcp/
+
+# Docker
+**/tmp/
+**/cache/
+
+

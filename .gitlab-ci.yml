@@ -1,0 +1,45 @@
+stages:
+  - build
+  - push
+  - deploy
+
+variables:
+  REGISTRY: $CI_REGISTRY_IMAGE
+
+build:backend:
+  stage: build
+  image: docker:24
+  services: [docker:24-dind]
+  script:
+    - docker build -t $REGISTRY/turbo-backend:$CI_COMMIT_SHA backend/go
+    - docker build -t $REGISTRY/turbo-file-upload:$CI_COMMIT_SHA services/file-upload
+    - docker build -t $REGISTRY/turbo-frontend:$CI_COMMIT_SHA frontend
+  only: [merge_requests, main]
+
+push:images:
+  stage: push
+  image: docker:24
+  services: [docker:24-dind]
+  script:
+    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER $CI_REGISTRY --password-stdin
+    - docker push $REGISTRY/turbo-backend:$CI_COMMIT_SHA
+    - docker push $REGISTRY/turbo-file-upload:$CI_COMMIT_SHA
+    - docker push $REGISTRY/turbo-frontend:$CI_COMMIT_SHA
+  only: [merge_requests, main]
+
+deploy:staging:
+  stage: deploy
+  image: bitnami/kubectl:latest
+  script:
+    - kubectl apply -f k8s/namespace.yaml
+    - kubectl -n turbo set image deployment/backend backend=$REGISTRY/turbo-backend:$CI_COMMIT_SHA --record=true || kubectl apply -f k8s/backend.yaml
+    - kubectl -n turbo set image deployment/file-upload file-upload=$REGISTRY/turbo-file-upload:$CI_COMMIT_SHA --record=true || kubectl apply -f k8s/file.yaml
+    - kubectl -n turbo set image deployment/frontend frontend=$REGISTRY/turbo-frontend:$CI_COMMIT_SHA --record=true || kubectl apply -f k8s/frontend.yaml
+    - kubectl apply -f k8s/postgres.yaml -n turbo
+    - kubectl apply -f k8s/redis.yaml -n turbo
+    - kubectl apply -f k8s/ingress.yaml -n turbo
+  environment:
+    name: staging
+  only: [main]
+
+
