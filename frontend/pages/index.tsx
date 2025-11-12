@@ -269,6 +269,7 @@ export default function Home() {
 
       <main className="turbo-main">
         <div className="turbo-topbar">
+          <BrandMark size="sm" showWordmark={false} className="turbo-topbar-mark" />
           <div className="turbo-channel-info">
             <span className="turbo-channel-title">{selectedFriend ? `DM · ${selectedFriend}` : '# General'}</span>
             <span className="turbo-channel-sub">secure realtime transport • low latency delivery</span>
